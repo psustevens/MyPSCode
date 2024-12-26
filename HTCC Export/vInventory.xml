@@ -1,0 +1,228 @@
+<Inventory>
+  <Roles>
+    <Role Name="com.vmware.Content.Admin" Label="Content library administrator (sample)" Summary="Provides full access to Content Library service">
+      <Privilege Name="ContentLibrary.AddLibraryItem" />
+      <Privilege Name="ContentLibrary.CreateLocalLibrary" />
+      <Privilege Name="ContentLibrary.CreateSubscribedLibrary" />
+      <Privilege Name="ContentLibrary.DeleteLibraryItem" />
+      <Privilege Name="ContentLibrary.DeleteLocalLibrary" />
+      <Privilege Name="ContentLibrary.DeleteSubscribedLibrary" />
+      <Privilege Name="ContentLibrary.DownloadSession" />
+      <Privilege Name="ContentLibrary.EvictLibraryItem" />
+      <Privilege Name="ContentLibrary.EvictSubscribedLibrary" />
+      <Privilege Name="ContentLibrary.GetConfiguration" />
+      <Privilege Name="ContentLibrary.ProbeSubscription" />
+      <Privilege Name="ContentLibrary.ReadStorage" />
+      <Privilege Name="ContentLibrary.SyncLibrary" />
+      <Privilege Name="ContentLibrary.SyncLibraryItem" />
+      <Privilege Name="ContentLibrary.TypeIntrospection" />
+      <Privilege Name="ContentLibrary.UpdateConfiguration" />
+      <Privilege Name="ContentLibrary.UpdateLibrary" />
+      <Privilege Name="ContentLibrary.UpdateLibraryItem" />
+      <Privilege Name="ContentLibrary.UpdateLocalLibrary" />
+      <Privilege Name="ContentLibrary.UpdateSession" />
+      <Privilege Name="ContentLibrary.UpdateSubscribedLibrary" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+    </Role>
+    <Role Name="VirtualMachinePowerUser" Label="Virtual machine power user (sample)" Summary="Provides virtual machine interaction and configuration permissions">
+      <Privilege Name="Datastore.Browse" />
+      <Privilege Name="Global.CancelTask" />
+      <Privilege Name="ScheduledTask.Create" />
+      <Privilege Name="ScheduledTask.Delete" />
+      <Privilege Name="ScheduledTask.Edit" />
+      <Privilege Name="ScheduledTask.Run" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+      <Privilege Name="VirtualMachine.Config.AddExistingDisk" />
+      <Privilege Name="VirtualMachine.Config.AddNewDisk" />
+      <Privilege Name="VirtualMachine.Config.AddRemoveDevice" />
+      <Privilege Name="VirtualMachine.Config.AdvancedConfig" />
+      <Privilege Name="VirtualMachine.Config.CPUCount" />
+      <Privilege Name="VirtualMachine.Config.DiskLease" />
+      <Privilege Name="VirtualMachine.Config.EditDevice" />
+      <Privilege Name="VirtualMachine.Config.Memory" />
+      <Privilege Name="VirtualMachine.Config.RemoveDisk" />
+      <Privilege Name="VirtualMachine.Config.Rename" />
+      <Privilege Name="VirtualMachine.Config.ResetGuestInfo" />
+      <Privilege Name="VirtualMachine.Config.Resource" />
+      <Privilege Name="VirtualMachine.Config.Settings" />
+      <Privilege Name="VirtualMachine.Config.UpgradeVirtualHardware" />
+      <Privilege Name="VirtualMachine.Interact.AnswerQuestion" />
+      <Privilege Name="VirtualMachine.Interact.ConsoleInteract" />
+      <Privilege Name="VirtualMachine.Interact.DeviceConnection" />
+      <Privilege Name="VirtualMachine.Interact.GuestControl" />
+      <Privilege Name="VirtualMachine.Interact.PowerOff" />
+      <Privilege Name="VirtualMachine.Interact.PowerOn" />
+      <Privilege Name="VirtualMachine.Interact.Reset" />
+      <Privilege Name="VirtualMachine.Interact.SetCDMedia" />
+      <Privilege Name="VirtualMachine.Interact.SetFloppyMedia" />
+      <Privilege Name="VirtualMachine.Interact.Suspend" />
+      <Privilege Name="VirtualMachine.Interact.ToolsInstall" />
+      <Privilege Name="VirtualMachine.State.CreateSnapshot" />
+      <Privilege Name="VirtualMachine.State.RemoveSnapshot" />
+      <Privilege Name="VirtualMachine.State.RenameSnapshot" />
+      <Privilege Name="VirtualMachine.State.RevertToSnapshot" />
+    </Role>
+    <Role Name="VirtualMachineUser" Label="Virtual machine user (sample)" Summary="Provides virtual machine interaction permissions">
+      <Privilege Name="Global.CancelTask" />
+      <Privilege Name="ScheduledTask.Create" />
+      <Privilege Name="ScheduledTask.Delete" />
+      <Privilege Name="ScheduledTask.Edit" />
+      <Privilege Name="ScheduledTask.Run" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+      <Privilege Name="VirtualMachine.Interact.AnswerQuestion" />
+      <Privilege Name="VirtualMachine.Interact.ConsoleInteract" />
+      <Privilege Name="VirtualMachine.Interact.DeviceConnection" />
+      <Privilege Name="VirtualMachine.Interact.PowerOff" />
+      <Privilege Name="VirtualMachine.Interact.PowerOn" />
+      <Privilege Name="VirtualMachine.Interact.Reset" />
+      <Privilege Name="VirtualMachine.Interact.SetCDMedia" />
+      <Privilege Name="VirtualMachine.Interact.SetFloppyMedia" />
+      <Privilege Name="VirtualMachine.Interact.Suspend" />
+      <Privilege Name="VirtualMachine.Interact.ToolsInstall" />
+    </Role>
+    <Role Name="ResourcePoolAdministrator" Label="Resource pool administrator (sample)" Summary="Supports delegated resource management">
+      <Privilege Name="Alarm.Create" />
+      <Privilege Name="Alarm.Delete" />
+      <Privilege Name="Alarm.Edit" />
+      <Privilege Name="Authorization.ModifyPermissions" />
+      <Privilege Name="Datastore.Browse" />
+      <Privilege Name="Folder.Create" />
+      <Privilege Name="Folder.Delete" />
+      <Privilege Name="Folder.Move" />
+      <Privilege Name="Folder.Rename" />
+      <Privilege Name="Global.CancelTask" />
+      <Privilege Name="Global.LogEvent" />
+      <Privilege Name="Global.SetCustomField" />
+      <Privilege Name="Resource.AssignVMToPool" />
+      <Privilege Name="Resource.ColdMigrate" />
+      <Privilege Name="Resource.CreatePool" />
+      <Privilege Name="Resource.DeletePool" />
+      <Privilege Name="Resource.EditPool" />
+      <Privilege Name="Resource.HotMigrate" />
+      <Privilege Name="Resource.MovePool" />
+      <Privilege Name="Resource.QueryVMotion" />
+      <Privilege Name="Resource.RenamePool" />
+      <Privilege Name="ScheduledTask.Create" />
+      <Privilege Name="ScheduledTask.Delete" />
+      <Privilege Name="ScheduledTask.Edit" />
+      <Privilege Name="ScheduledTask.Run" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+      <Privilege Name="VirtualMachine.Config.AddExistingDisk" />
+      <Privilege Name="VirtualMachine.Config.AddNewDisk" />
+      <Privilege Name="VirtualMachine.Config.AddRemoveDevice" />
+      <Privilege Name="VirtualMachine.Config.AdvancedConfig" />
+      <Privilege Name="VirtualMachine.Config.CPUCount" />
+      <Privilege Name="VirtualMachine.Config.DiskLease" />
+      <Privilege Name="VirtualMachine.Config.EditDevice" />
+      <Privilege Name="VirtualMachine.Config.Memory" />
+      <Privilege Name="VirtualMachine.Config.RawDevice" />
+      <Privilege Name="VirtualMachine.Config.RemoveDisk" />
+      <Privilege Name="VirtualMachine.Config.Rename" />
+      <Privilege Name="VirtualMachine.Config.ResetGuestInfo" />
+      <Privilege Name="VirtualMachine.Config.Resource" />
+      <Privilege Name="VirtualMachine.Config.Settings" />
+      <Privilege Name="VirtualMachine.Config.UpgradeVirtualHardware" />
+      <Privilege Name="VirtualMachine.Interact.AnswerQuestion" />
+      <Privilege Name="VirtualMachine.Interact.ConsoleInteract" />
+      <Privilege Name="VirtualMachine.Interact.DeviceConnection" />
+      <Privilege Name="VirtualMachine.Interact.PowerOff" />
+      <Privilege Name="VirtualMachine.Interact.PowerOn" />
+      <Privilege Name="VirtualMachine.Interact.Reset" />
+      <Privilege Name="VirtualMachine.Interact.SetCDMedia" />
+      <Privilege Name="VirtualMachine.Interact.SetFloppyMedia" />
+      <Privilege Name="VirtualMachine.Interact.Suspend" />
+      <Privilege Name="VirtualMachine.Interact.ToolsInstall" />
+      <Privilege Name="VirtualMachine.Inventory.Create" />
+      <Privilege Name="VirtualMachine.Inventory.CreateFromExisting" />
+      <Privilege Name="VirtualMachine.Inventory.Delete" />
+      <Privilege Name="VirtualMachine.Inventory.Move" />
+      <Privilege Name="VirtualMachine.Inventory.Register" />
+      <Privilege Name="VirtualMachine.Inventory.Unregister" />
+      <Privilege Name="VirtualMachine.Provisioning.Clone" />
+      <Privilege Name="VirtualMachine.Provisioning.CloneTemplate" />
+      <Privilege Name="VirtualMachine.Provisioning.CreateTemplateFromVM" />
+      <Privilege Name="VirtualMachine.Provisioning.Customize" />
+      <Privilege Name="VirtualMachine.Provisioning.DeployTemplate" />
+      <Privilege Name="VirtualMachine.Provisioning.DiskRandomAccess" />
+      <Privilege Name="VirtualMachine.Provisioning.DiskRandomRead" />
+      <Privilege Name="VirtualMachine.Provisioning.GetVmFiles" />
+      <Privilege Name="VirtualMachine.Provisioning.MarkAsTemplate" />
+      <Privilege Name="VirtualMachine.Provisioning.MarkAsVM" />
+      <Privilege Name="VirtualMachine.Provisioning.ModifyCustSpecs" />
+      <Privilege Name="VirtualMachine.Provisioning.PutVmFiles" />
+      <Privilege Name="VirtualMachine.Provisioning.ReadCustSpecs" />
+      <Privilege Name="VirtualMachine.State.CreateSnapshot" />
+      <Privilege Name="VirtualMachine.State.RemoveSnapshot" />
+      <Privilege Name="VirtualMachine.State.RenameSnapshot" />
+      <Privilege Name="VirtualMachine.State.RevertToSnapshot" />
+    </Role>
+    <Role Name="VMwareConsolidatedBackupUser" Label="VMware Consolidated Backup user (sample)" Summary="Used by the Consolidated Backup utility">
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+      <Privilege Name="VirtualMachine.Config.DiskLease" />
+      <Privilege Name="VirtualMachine.Provisioning.DiskRandomRead" />
+      <Privilege Name="VirtualMachine.Provisioning.GetVmFiles" />
+      <Privilege Name="VirtualMachine.State.CreateSnapshot" />
+      <Privilege Name="VirtualMachine.State.RemoveSnapshot" />
+    </Role>
+    <Role Name="DatastoreConsumer" Label="Datastore consumer (sample)" Summary="Assigned to datastores to allow creating disks or snapshots">
+      <Privilege Name="Datastore.AllocateSpace" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+    </Role>
+    <Role Name="NetworkConsumer" Label="Network administrator (sample)" Summary="Assigned to networks to allow association of virtual machines or hosts with networks">
+      <Privilege Name="Network.Assign" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+    </Role>
+    <Role Name="VirtualMachineConsoleUser" Label="Virtual Machine console user" Summary="Provides virtual machine console interaction permissions. This role is required for VMRC sessions. Exercise caution when altering/removing this role from vCenter Server.">
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+      <Privilege Name="VirtualMachine.Interact.AnswerQuestion" />
+      <Privilege Name="VirtualMachine.Interact.ConsoleInteract" />
+      <Privilege Name="VirtualMachine.Interact.DeviceConnection" />
+      <Privilege Name="VirtualMachine.Interact.PowerOff" />
+      <Privilege Name="VirtualMachine.Interact.PowerOn" />
+      <Privilege Name="VirtualMachine.Interact.Reset" />
+      <Privilege Name="VirtualMachine.Interact.SetCDMedia" />
+      <Privilege Name="VirtualMachine.Interact.SetFloppyMedia" />
+      <Privilege Name="VirtualMachine.Interact.Suspend" />
+      <Privilege Name="VirtualMachine.Interact.ToolsInstall" />
+    </Role>
+    <Role Name="InventoryService.Tagging.TaggingAdmin" Label="InventoryService.Tagging.TaggingAdmin" Summary="InventoryService.Tagging.TaggingAdmin">
+      <Privilege Name="InventoryService.Tagging.AttachTag" />
+      <Privilege Name="InventoryService.Tagging.CreateCategory" />
+      <Privilege Name="InventoryService.Tagging.CreateTag" />
+      <Privilege Name="InventoryService.Tagging.DeleteCategory" />
+      <Privilege Name="InventoryService.Tagging.DeleteTag" />
+      <Privilege Name="InventoryService.Tagging.EditCategory" />
+      <Privilege Name="InventoryService.Tagging.EditTag" />
+      <Privilege Name="InventoryService.Tagging.ModifyUsedByForCategory" />
+      <Privilege Name="InventoryService.Tagging.ModifyUsedByForTag" />
+      <Privilege Name="System.Anonymous" />
+      <Privilege Name="System.Read" />
+      <Privilege Name="System.View" />
+    </Role>
+  </Roles>
+  <Permissions>
+    <Permission Entity="Datacenters" EntityType="Folder" Group="False" Principal="VSPHERE.LOCAL\vpxd-extension-32482b99-7d17-4f34-a968-a37f6bc20b65" Propagate="True" Role="Admin" />
+    <Permission Entity="Datacenters" EntityType="Folder" Group="False" Principal="VSPHERE.LOCAL\vpxd-32482b99-7d17-4f34-a968-a37f6bc20b65" Propagate="True" Role="Admin" />
+    <Permission Entity="Datacenters" EntityType="Folder" Group="False" Principal="VSPHERE.LOCAL\vsphere-webclient-32482b99-7d17-4f34-a968-a37f6bc20b65" Propagate="True" Role="ReadOnly" />
+    <Permission Entity="Datacenters" EntityType="Folder" Group="False" Principal="TPMTXT\htcc-svc" Propagate="True" Role="Admin" />
+    <Permission Entity="Datacenters" EntityType="Folder" Group="False" Principal="VSPHERE.LOCAL\Administrator" Propagate="True" Role="Admin" />
+    <Permission Entity="Datacenters" EntityType="Folder" Group="True" Principal="VSPHERE.LOCAL\Administrators" Propagate="True" Role="Admin" />
+    <Permission Entity="Datacenters" EntityType="Folder" Group="True" Principal="TPMTXT\vCenter Admins" Propagate="True" Role="Admin" />
+  </Permissions>
+</Inventory>
