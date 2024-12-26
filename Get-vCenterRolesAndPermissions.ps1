@@ -5,7 +5,8 @@
     .DESCRIPTION This function will retrieve all of the DataCenters being managed by a VMware Virtual Center. 
     For each DataCenter all of the VM folders and the corresponding permissions will be retrieved and listed in CSV format.
 
-    .NOTES Author: David Stevens 
+    .NOTES Author: Luc Dekens
+    .NOTES Modified: David Stevens 
 
     .PARAMETER The Name of the vCenter Server, preferably the fully qualified domain name. This is a required parameter. 
      
