@@ -1,0 +1,2 @@
+# This is the winner, as it takes into account special characters in the file name
+Get-ChildItem | Where { $_.Name -match "^[0-9]{2}\s.*" } | ForEach-Object { $NewName = $_.Name -replace "^[0-9]{2}\s",""; [System.IO.File]::Move($_.FullName, $_.DirectoryName + $NewName) }
