@@ -36,7 +36,7 @@ Function Rename-Image {
 
     # Regular expression to capture the characters leading up to the parentheses including the leading space
     $regexLeading = '^(.*?)(?=\s+\()'
-    $regex = '^Europe - Joel \d{4} \d{3}_edited-\d \(\d{4}_\d{2}_\d{2} \d{2}_\d{2}_\d{2} UTC\)\.jpg$'
+    #$regex = '^Europe - Joel \d{4} \d{3}_edited-\d \(\d{4}_\d{2}_\d{2} \d{2}_\d{2}_\d{2} UTC\)\.jpg$'
 
     <#if ($FileFormat[0] -match $regexLeading) { 
         # The characters leading up to the parentheses are captured in the first capturing group 
@@ -85,5 +85,5 @@ Function Rename-Image {
     }
 }
 
-Rename-Image -FileFormat "Europe - Joel 2010 *_edited-1 (*).jpg" -Directory "C:\Users\david\Documents\github\MyPSCode\test"
+Rename-Image -FileFormat "Europe - Joel 2010 *_edited-1 (*).jpg" -Directory "I:\Our Pictures\Other Photos"
  
