@@ -88,5 +88,5 @@ Function Rename-Image {
     }
 }
 
-Rename-Image -FileFormat "2024 04 08_Solar Eclipse_(*).JPG" -Directory "C:\Users\david\Documents\github\MyPSCode\Rename test" 
+Rename-Image -FileFormat "2024 08 07_Weekend in Bethlehem, NH_(*).NEF" -Directory "P:\2024\2024 08 07 Weekend in Bethlehem, NH"
 #Rename-Image -FileFormat "2024 04 08_Solar Eclipse_(*).NEF" 
