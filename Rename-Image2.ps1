@@ -36,14 +36,15 @@ Function Rename-Image {
 
     # Regular expression to capture the characters leading up to the parentheses including the leading space
     $regexLeading = '^(.*?)(?=\s+\()'
+    $regex = '^Europe - Joel \d{4} \d{3}_edited-\d \(\d{4}_\d{2}_\d{2} \d{2}_\d{2}_\d{2} UTC\)\.jpg$'
 
-    if ($FileFormat[0] -match $regexLeading) { 
+    <#if ($FileFormat[0] -match $regexLeading) { 
         # The characters leading up to the parentheses are captured in the first capturing group 
         $leadingCharacters = $matches[1] 
         Write-Verbose "The characters leading up to the parentheses are: $leadingCharacters" 
     } else { 
         Write-Verbose "No match found in the filename." 
-    }
+    }#>
 
     # Parse out the file extension
     if ($FileFormat[0] -match $regexExtension) { 
@@ -66,16 +67,23 @@ Function Rename-Image {
     foreach ($file in $files) {
         # Extract the current file name
         $currentName = $file.Name
+
+        # Use regex to capture the number in parentheses
+        # if ($currentName -match "Europe - Joel 2010 \d{3}_edited-1 \(\d{4}_\d{2}_\d{2} \d{2}_\d{2}_\d{2} UTC\)\.jpg$) {
+        # if ($currentName -match "Europe - Joel 2010 \d{3}_edited-1 (*).jpg") {
+        if ($currentName -match $regexLeading) {
+            $leadingCharacters = $matches[0]
         
-        # Create the new file name
-        $newName = "$leadingCharacters$fileExtension"
+            # Create the new file name
+            $newName = "$leadingCharacters$fileExtension"
 
-        # Rename the file
-        Rename-Item -Path $file.FullName -NewName $newName
+            # Rename the file
+            Rename-Item -Path $file.FullName -NewName $newName
 
-        Write-Output "Renamed '$currentName' to '$newName'"
+            Write-Output "Renamed '$currentName' to '$newName'"
+        }
     }
 }
 
-Rename-Image -FileFormat "Europe - Joel 2010 205_edited-1 (*).jpg" -Directory "C:\Users\david\Documents\github\MyPSCode\test"
+Rename-Image -FileFormat "Europe - Joel 2010 *_edited-1 (*).jpg" -Directory "C:\Users\david\Documents\github\MyPSCode\test"
  
