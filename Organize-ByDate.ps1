@@ -24,8 +24,22 @@ if ($CsvLog) {
     "File,DateSource,DateValue,DestinationFolder,DestinationFile,Action" | Out-File $csvFile
 }
 
-# Get all files recursively
-$files = Get-ChildItem -Path $FolderPath -File -Recurse
+# Get all files recursively, excluding the generated log files
+$csvFile = $null
+if ($CsvLog) {
+    $csvFile = Join-Path $FolderPath "OrganizeByDate_Log_$timestamp.csv"
+}
+
+$files = Get-ChildItem -Path $FolderPath -File -Recurse |
+    Where-Object {
+        $name = $_.Name
+        $fullName = $_.FullName
+        $isLogFile = $name -like 'OrganizeByDate_Log_*.txt' -or $name -like 'OrganizeByDate_Log_*.csv'
+        $isCurrentLogFile = $fullName -eq $logFile
+        $isCurrentCsvFile = $fullName -eq $csvFile
+
+        -not ($isLogFile -or $isCurrentLogFile -or $isCurrentCsvFile)
+    }
 
 # Process files sequentially
 foreach ($file in $files) {
@@ -82,7 +96,7 @@ foreach ($file in $files) {
     # Create folder
     if (-not (Test-Path $newFolderPath)) {
         Add-Content -Path $logFile -Value "Action: Create folder"
-        New-Item -ItemType Directory -Path $newFolderPath -WhatIf
+        New-Item -ItemType Directory -Path $newFolderPath
 
         if ($CsvLog) {
             ($csvBase + "CreateFolder") | Add-Content -Path $csvFile
@@ -98,7 +112,7 @@ foreach ($file in $files) {
 
     # Move file
     Add-Content -Path $logFile -Value "Action: Move file"
-    Move-Item -Path $file.FullName -Destination $destination -WhatIf
+    Move-Item -Path $file.FullName -Destination $destination
 
     if ($CsvLog) {
         '"' + $file.FullName + '","' +

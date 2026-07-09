@@ -8,7 +8,7 @@
             "script": "${workspaceFolder}/Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
-                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy",
+                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\",
                 "-WhatIf"
             ],
             "cwd": "${workspaceFolder}"
@@ -20,7 +20,7 @@
             "script": "${workspaceFolder}/Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
-                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy",
+                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\",
                 "-CsvLog",
                 "-WhatIf"
             ],
@@ -33,7 +33,7 @@
             "script": "${workspaceFolder}/Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
-                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy",
+                "'C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\'",
                 "-CsvLog"
             ],
             "cwd": "${workspaceFolder}"
@@ -45,7 +45,7 @@
             "script": "${workspaceFolder}/Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
-                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy"
+                "'C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\'"
             ],
             "cwd": "${workspaceFolder}"
         },
