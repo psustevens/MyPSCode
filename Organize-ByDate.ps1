@@ -2,9 +2,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$FolderPath,
 
-    [switch]$CsvLog,
-
-    [int]$Throttle = 6   # number of parallel threads
+    [switch]$CsvLog
 )
 
 # Validate folder
@@ -29,16 +27,10 @@ if ($CsvLog) {
 # Get all files recursively
 $files = Get-ChildItem -Path $FolderPath -File -Recurse
 
-# Parallel block
-$files | ForEach-Object -Parallel {
-
-    param($FolderPath, $logFile, $CsvLog, $csvFile)
-
-    # Each thread must create its own Shell COM instance
+# Process files sequentially
+foreach ($file in $files) {
+    # Each iteration uses its own Shell COM instance
     $Shell = New-Object -ComObject Shell.Application
-
-    # Get file info
-    $file = $_
     $parentFolder = Split-Path $file.FullName -Parent
     $folderObj    = $Shell.NameSpace($parentFolder)
     $itemObj      = $folderObj.ParseName($file.Name)
@@ -117,8 +109,7 @@ $files | ForEach-Object -Parallel {
     }
 
     Add-Content -Path $logFile -Value ""
+}
 
-} -ArgumentList $FolderPath, $logFile, $CsvLog, $csvFile -ThrottleLimit $Throttle
-
-Write-Host "Parallel processing complete. Log file: $logFile"
+Write-Host "Processing complete. Log file: $logFile"
 if ($CsvLog) { Write-Host "CSV log: $csvFile" }
