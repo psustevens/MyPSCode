@@ -2,22 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Organize-ByDate: Test Run (WhatIf)",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "${workspaceFolder}/Organize-ByDate.ps1",
-            "args": [
-                "-FolderPath",
-                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\",
-                "-WhatIf"
-            ],
-            "cwd": "${workspaceFolder}"
-        },
-        {
             "name": "Organize-ByDate: With CSV Log (WhatIf)",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/Organize-ByDate.ps1",
+            "script": "${workspaceFolder}\\Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
                 "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\",
@@ -30,10 +18,10 @@
             "name": "Organize-ByDate: With CSV Log",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/Organize-ByDate.ps1",
+            "script": "${workspaceFolder}\\Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
-                "'C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\'",
+                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\",
                 "-CsvLog"
             ],
             "cwd": "${workspaceFolder}"
@@ -42,10 +30,22 @@
             "name": "Organize-ByDate: Without CSV Log",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${workspaceFolder}/Organize-ByDate.ps1",
+            "script": "${workspaceFolder}\\Organize-ByDate.ps1",
             "args": [
                 "-FolderPath",
-                "'C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\'"
+                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Organize-ByDate: Test Run (WhatIf)",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}\\Organize-ByDate.ps1",
+            "args": [
+                "-FolderPath",
+                "C:\\Users\\david\\Documents\\On1 Work folder\\Deeb's iPhone pics\\202605_a - Copy\\",
+                "-WhatIf"
             ],
             "cwd": "${workspaceFolder}"
         },

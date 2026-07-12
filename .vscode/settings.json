@@ -1,0 +1,8 @@
+{
+  "powershell.powerShellDefaultVersion": "PowerShell 7",
+  "powershell.powerShellAdditionalExePaths": {
+    "PowerShell 7": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+  },
+  "powershell.integratedConsole": true,
+  "powershell.integratedConsole.focusConsoleOnExecute": true
+}

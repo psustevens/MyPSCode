@@ -1,9 +1,16 @@
+[CmdletBinding(SupportsShouldProcess=$true)]
 param(
     [Parameter(Mandatory=$true)]
     [string]$FolderPath,
 
     [switch]$CsvLog
 )
+
+$mediaCreated = $null
+$dateTaken = $null
+$finalDate = $null
+$files = $null
+$file = $null
 
 # Validate folder
 if (-not (Test-Path $FolderPath)) {
@@ -52,8 +59,16 @@ foreach ($file in $files) {
     # 1️⃣ EXIF "Media Created"
     $mediaCreated = $itemObj.ExtendedProperty("System.Media.DateEncoded")
 
+    if ($mediaCreated -is [datetime]) {
+        $mediaCreated = $mediaCreated.ToLocalTime()
+    }
+
     # 2️⃣ EXIF "Date Taken"
     $dateTaken = $itemObj.ExtendedProperty("System.Photo.DateTaken")
+    
+    if ($dateTaken -is [datetime]) {
+        $dateTaken = $dateTaken.ToLocalTime()
+    }
 
     # 3️⃣ Fallback: Date Modified
     $finalDate = $mediaCreated
@@ -123,7 +138,13 @@ foreach ($file in $files) {
     }
 
     Add-Content -Path $logFile -Value ""
+    $mediaCreated = $null
+    $dateTaken = $null
+    $finalDate = $null
 }
+
+$files = $null
+$file = $null
 
 Write-Host "Processing complete. Log file: $logFile"
 if ($CsvLog) { Write-Host "CSV log: $csvFile" }
