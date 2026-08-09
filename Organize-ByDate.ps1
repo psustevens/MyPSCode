@@ -1,3 +1,43 @@
+<##
+.SYNOPSIS
+Organizes files in a folder by date into subfolders named by date.
+
+.DESCRIPTION
+This script scans all files under the specified folder recursively and 
+determines a date for each file using file metadata.
+
+It first checks EXIF Media Created (System.Media.DateEncoded), then EXIF Date Taken (System.Photo.DateTaken), 
+and finally falls back to LastWriteTime.
+
+Files are moved into subfolders named using the format yyyy-MM-dd inside the target folder.
+A plain text log is written to the target folder, and an optional CSV log can also be generated.
+
+.PARAMETER FolderPath
+The root folder that contains the files to organize.
+
+.PARAMETER CsvLog
+Switch to generate a CSV log file in addition to the plain text log.
+
+.EXAMPLE
+.
+    .\Organize-ByDate.ps1 -FolderPath C:\Users\david\Pictures
+
+This will organize all files under C:\Users\david\Pictures into date-based subfolders and create a log file.
+
+.EXAMPLE
+.
+    .\Organize-ByDate.ps1 -FolderPath C:\Users\david\Pictures -CsvLog
+
+This will do the same organization and also generate a CSV log file with file details.
+
+.NOTES
+The script excludes its own generated log files from processing.
+    Author: David Stevens
+    Created: 2026-07-09
+    Last Modified: 2026-08-09
+    Tested On: Windows 10/11, PowerShell 7.x
+##>
+
 [CmdletBinding(SupportsShouldProcess=$true)]
 param(
     [Parameter(Mandatory=$true)]
