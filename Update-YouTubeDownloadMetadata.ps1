@@ -23,6 +23,9 @@
 	an explicitly supplied value is used for every file. Existing metadata is
 	preserved for optional fields that are not supplied.
 
+	The values being set are displayed for each file. Use LogPath to append
+	successfully updated metadata values to a CSV file for later review.
+
 .PARAMETER Path
 	Path to a single MP3 file or a directory containing MP3 files.
 
@@ -55,6 +58,10 @@ the existing contributing artists metadata is preserved.
 Optional. Year the song was created. If omitted, the existing year metadata
 is preserved.
 
+.PARAMETER LogPath
+Optional. Path to a CSV file to which successfully updated metadata values
+are appended.
+
 .EXAMPLE
 	.\Update-YouTubeDownloadMetadata.ps1 -Path '.\01 - Song Title.mp3' `
 		-AlbumArtist 'Example Artist' -Album 'Example Album' `
@@ -65,10 +72,12 @@ is preserved.
 .EXAMPLE
 	.\Update-YouTubeDownloadMetadata.ps1 -Path '.\downloads' `
 		-AlbumArtist 'Example Artist' -Album 'Example Album' `
-		-PartOfSet '1/1' -Genre 'Pop' -Year 2024
+		-PartOfSet '1/1' -Genre 'Pop' -Year 2024 `
+		-LogPath '.\metadata-updates.csv'
 
 	Updates every MP3 file directly in the directory, inferring each track
-	number and title from its filename.
+	number and title from its filename. Displays the metadata values and
+	appends successfully updated values to the CSV log.
 
 .EXAMPLE
 	.\Update-YouTubeDownloadMetadata.ps1 -Path '.\download.mp3' `
@@ -110,7 +119,10 @@ param (
 	[string]$ContributingArtists,
 
 	[ValidateNotNullOrEmpty()]
-	[string]$Year
+	[string]$Year,
+
+	[ValidateNotNullOrEmpty()]
+	[string]$LogPath
 )
 
 Set-StrictMode -Version Latest
@@ -140,6 +152,18 @@ $ffmpeg = Get-Command -Name ffmpeg -CommandType Application -ErrorAction Stop |
 	Select-Object -First 1
 $resolvedPath = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path
 $target = Get-Item -LiteralPath $resolvedPath -ErrorAction Stop
+$resolvedLogPath = if ($PSBoundParameters.ContainsKey('LogPath')) {
+	[System.IO.Path]::GetFullPath($LogPath)
+}
+if ($resolvedLogPath) {
+	$logDirectory = Split-Path -Path $resolvedLogPath -Parent
+	if (-not (Test-Path -LiteralPath $logDirectory -PathType Container)) {
+		throw "The log directory does not exist: '$logDirectory'."
+	}
+	if (Test-Path -LiteralPath $resolvedLogPath -PathType Container) {
+		throw "The log path must be a file path, not a directory: '$resolvedLogPath'."
+	}
+}
 
 if ($target.PSIsContainer) {
 	$files = @(Get-ChildItem -LiteralPath $target.FullName -File -Filter '*.mp3' -ErrorAction Stop)
@@ -155,6 +179,14 @@ else {
 }
 
 foreach ($file in $files) {
+	if ($resolvedLogPath -and [string]::Equals(
+			$resolvedLogPath,
+			$file.FullName,
+			[System.StringComparison]::OrdinalIgnoreCase
+		)) {
+		throw "The log path cannot be the same as an MP3 file: '$($file.FullName)'."
+	}
+
 	$inferredMetadata = Get-TrackMetadataFromFileName -FileName $file.Name
 
 	if ($PSBoundParameters.ContainsKey('Number')) {
@@ -176,6 +208,26 @@ foreach ($file in $files) {
 
 	if ([string]::IsNullOrWhiteSpace($trackTitle)) {
 		throw "Could not infer a title from '$($file.Name)'. Supply -Title."
+	}
+
+	$metadataValues = [ordered]@{
+		Title        = $trackTitle
+		AlbumArtist  = $AlbumArtist
+		Album        = $Album
+		Number       = $trackNumber
+		PartOfSet    = $PartOfSet
+		Genre        = $Genre
+	}
+	if ($PSBoundParameters.ContainsKey('ContributingArtists')) {
+		$metadataValues.ContributingArtists = $ContributingArtists
+	}
+	if ($PSBoundParameters.ContainsKey('Year')) {
+		$metadataValues.Year = $Year
+	}
+
+	Write-Host "Metadata values for '$($file.FullName)':"
+	foreach ($entry in $metadataValues.GetEnumerator()) {
+		Write-Host ("  {0}: {1}" -f $entry.Key, $entry.Value)
 	}
 
 	if ($PSCmdlet.ShouldProcess($file.FullName, "Update MP3 metadata")) {
@@ -222,7 +274,8 @@ foreach ($file in $files) {
 			}
 		}
 
-		[PSCustomObject]@{
+		$updatedMetadata = [PSCustomObject]@{
+			Timestamp           = Get-Date
 			Path                = $file.FullName
 			Title               = $trackTitle
 			AlbumArtist         = $AlbumArtist
@@ -238,5 +291,11 @@ foreach ($file in $files) {
 			}
 			Year                = if ($PSBoundParameters.ContainsKey('Year')) { $Year } else { $null }
 		}
+		if ($resolvedLogPath) {
+			$updatedMetadata |
+				Export-Csv -LiteralPath $resolvedLogPath -NoTypeInformation -Append -ErrorAction Stop
+			Write-Host "Appended metadata values to '$resolvedLogPath'."
+		}
+		$updatedMetadata
 	}
 }
