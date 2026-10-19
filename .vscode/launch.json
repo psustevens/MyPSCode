@@ -1,6 +1,79 @@
 {
     "version": "0.2.0",
+    "inputs": [
+        {
+            "id": "metadataPath",
+            "type": "promptString",
+            "description": "MP3 file path or directory path",
+            "default": "${workspaceFolder}\\01 - Song Title.mp3"
+        },
+        {
+            "id": "metadataAlbumArtist",
+            "type": "promptString",
+            "description": "Album artist",
+            "default": "Example Artist"
+        },
+        {
+            "id": "metadataAlbum",
+            "type": "promptString",
+            "description": "Album name",
+            "default": "Example Album"
+        },
+        {
+            "id": "metadataPartOfSet",
+            "type": "promptString",
+            "description": "Part of set (disc number)",
+            "default": "1/1"
+        },
+        {
+            "id": "metadataGenre",
+            "type": "promptString",
+            "description": "Genre",
+            "default": "Pop"
+        }
+    ],
     "configurations": [
+        {
+            "name": "Set-YouTubeDownloadMetadata: WhatIf",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}\\Set-YouTubeDownloadMetadata.ps1",
+            "args": [
+                "-Path",
+                "${input:metadataPath}",
+                "-AlbumArtist",
+                "${input:metadataAlbumArtist}",
+                "-Album",
+                "${input:metadataAlbum}",
+                "-PartOfSet",
+                "${input:metadataPartOfSet}",
+                "-Genre",
+                "${input:metadataGenre}",
+                "-Verbose",
+                "-WhatIf"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Set-YouTubeDownloadMetadata: Update",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}\\Set-YouTubeDownloadMetadata.ps1",
+            "args": [
+                "-Path",
+                "${input:metadataPath}",
+                "-AlbumArtist",
+                "${input:metadataAlbumArtist}",
+                "-Album",
+                "${input:metadataAlbum}",
+                "-PartOfSet",
+                "${input:metadataPartOfSet}",
+                "-Genre",
+                "${input:metadataGenre}",
+                "-Verbose"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
         {
             "name": "Organize-ByDate: With CSV Log (WhatIf)",
             "type": "PowerShell",
