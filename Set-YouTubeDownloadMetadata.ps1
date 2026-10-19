@@ -25,6 +25,8 @@
 
 	The values being set are displayed for each file. Use LogPath to append
 	successfully updated metadata values to a CSV file for later review.
+	Use -Verbose to see processing details, including file discovery, inferred
+	values, and update/logging progress.
 
 .PARAMETER Path
 	Path to a single MP3 file or a directory containing MP3 files.
@@ -83,9 +85,10 @@ are appended.
 	.\Update-YouTubeDownloadMetadata.ps1 -Path '.\download.mp3' `
 		-AlbumArtist 'Example Artist' -Album 'Example Album' -Number 1 `
 		-PartOfSet '1/1' -Genre 'Pop' -Title 'Song Title' `
-		-ContributingArtists 'Featured Artist' -Year 2024
+		-ContributingArtists 'Featured Artist' -Year 2024 -Verbose
 
-	Provides the required values and all optional values explicitly.
+	Provides the required values and all optional values explicitly, and shows
+	verbose processing details.
 #>
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param (
@@ -150,12 +153,17 @@ function Get-TrackMetadataFromFileName {
 
 $ffmpeg = Get-Command -Name ffmpeg -CommandType Application -ErrorAction Stop |
 	Select-Object -First 1
+Write-Verbose "Using FFmpeg executable '$($ffmpeg.Source)'."
+
 $resolvedPath = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path
 $target = Get-Item -LiteralPath $resolvedPath -ErrorAction Stop
+Write-Verbose "Resolved input path to '$resolvedPath'."
+
 $resolvedLogPath = if ($PSBoundParameters.ContainsKey('LogPath')) {
 	[System.IO.Path]::GetFullPath($LogPath)
 }
 if ($resolvedLogPath) {
+	Write-Verbose "CSV logging is enabled at '$resolvedLogPath'."
 	$logDirectory = Split-Path -Path $resolvedLogPath -Parent
 	if (-not (Test-Path -LiteralPath $logDirectory -PathType Container)) {
 		throw "The log directory does not exist: '$logDirectory'."
@@ -170,15 +178,19 @@ if ($target.PSIsContainer) {
 	if ($files.Count -eq 0) {
 		throw "No MP3 files were found directly in directory '$resolvedPath'."
 	}
+	Write-Verbose "Found $($files.Count) MP3 file(s) directly in '$resolvedPath'."
 }
 else {
 	if ($target.Extension -ine '.mp3') {
 		throw "The file '$resolvedPath' is not an MP3 file."
 	}
 	$files = @($target)
+	Write-Verbose "Processing the single MP3 file '$($target.FullName)'."
 }
 
 foreach ($file in $files) {
+	Write-Verbose "Preparing metadata values for '$($file.FullName)'."
+
 	if ($resolvedLogPath -and [string]::Equals(
 			$resolvedLogPath,
 			$file.FullName,
@@ -209,6 +221,7 @@ foreach ($file in $files) {
 	if ([string]::IsNullOrWhiteSpace($trackTitle)) {
 		throw "Could not infer a title from '$($file.Name)'. Supply -Title."
 	}
+	Write-Verbose "Inferred track number $trackNumber and title '$trackTitle' from '$($file.Name)' unless explicitly supplied."
 
 	$metadataValues = [ordered]@{
 		Title        = $trackTitle
@@ -231,6 +244,7 @@ foreach ($file in $files) {
 	}
 
 	if ($PSCmdlet.ShouldProcess($file.FullName, "Update MP3 metadata")) {
+		Write-Verbose "Starting FFmpeg metadata update for '$($file.FullName)'."
 		$tempPath = Join-Path -Path $file.DirectoryName -ChildPath ".$([guid]::NewGuid().ToString('N')).tmp.mp3"
 
 		try {
@@ -267,10 +281,12 @@ foreach ($file in $files) {
 			}
 
 			Move-Item -LiteralPath $tempPath -Destination $file.FullName -Force -ErrorAction Stop
+			Write-Verbose "Successfully updated metadata for '$($file.FullName)'."
 		}
 		finally {
 			if (Test-Path -LiteralPath $tempPath -PathType Leaf) {
 				Remove-Item -LiteralPath $tempPath -Force -ErrorAction Stop
+				Write-Verbose "Removed temporary file '$tempPath'."
 			}
 		}
 
@@ -292,10 +308,14 @@ foreach ($file in $files) {
 			Year                = if ($PSBoundParameters.ContainsKey('Year')) { $Year } else { $null }
 		}
 		if ($resolvedLogPath) {
+			Write-Verbose "Appending updated metadata for '$($file.FullName)' to the CSV log."
 			$updatedMetadata |
 				Export-Csv -LiteralPath $resolvedLogPath -NoTypeInformation -Append -ErrorAction Stop
 			Write-Host "Appended metadata values to '$resolvedLogPath'."
 		}
 		$updatedMetadata
+	}
+	else {
+		Write-Verbose "Skipped metadata update for '$($file.FullName)' because WhatIf was specified or confirmation was declined."
 	}
 }
