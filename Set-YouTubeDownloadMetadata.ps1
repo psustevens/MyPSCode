@@ -9,8 +9,9 @@
 	REQUIRED DEPENDENCY: FFmpeg (ffmpeg.exe) must be installed and available
 	on PATH. The script cannot update MP3 metadata without it.
 
-	Album Artist, Album, PartOfSet, and Genre are required. Title and Number
-	may be specified explicitly; otherwise, they are inferred from the filename.
+	Album Artist and Album are required. Title and Number may be specified
+	explicitly; otherwise, they are inferred from the filename. PartOfSet and
+	Genre are optional, and existing metadata is preserved when they are omitted.
 	For example, "01 - Song Title.mp3" gives track number 1 and title "Song
 	Title". Only the initial track number and separator are removed from the
 	title. Thus, "01 - Official Music Video - Come A Little Closer - Kelly
@@ -23,8 +24,10 @@
 	an explicitly supplied value is used for every file. Existing metadata is
 	preserved for optional fields that are not supplied.
 
-	The values being set are displayed for each file. Use LogPath to append
-	successfully updated metadata values to a CSV file for later review.
+	The values being set are displayed for each file. Successfully updated
+	metadata values are appended to a CSV file. By default, the file is named
+	metadata-updates.csv in the directory specified by Path (or the MP3 file's
+	directory when Path is a file). Use LogPath to choose another location.
 	Use -Verbose to see processing details, including file discovery, inferred
 	values, and update/logging progress.
 
@@ -42,11 +45,11 @@ Optional. Track number to set. If omitted, the track number is inferred
 from the filename's initial number.
 
 .PARAMETER PartOfSet
-Required. Disc number or part of the set, such as '1/2' for the first disc
-of a two-disc album.
+Optional. Disc number or part of the set, such as '1/2' for the first disc
+of a two-disc album. If omitted, the existing part of set metadata is preserved.
 
 .PARAMETER Genre
-Required. Genre of the song.
+Optional. Genre of the song. If omitted, the existing genre metadata is preserved.
 
 .PARAMETER Title
 Optional. Song title. If omitted, the title is derived from the filename
@@ -62,7 +65,8 @@ is preserved.
 
 .PARAMETER LogPath
 Optional. Path to a CSV file to which successfully updated metadata values
-are appended.
+are appended. If omitted, metadata-updates.csv is created in the directory
+specified by Path, or in the parent directory when Path is an MP3 file.
 
 .EXAMPLE
 	.\Update-YouTubeDownloadMetadata.ps1 -Path '.\01 - Song Title.mp3' `
@@ -107,11 +111,9 @@ param (
 	[ValidateRange(1, [int]::MaxValue)]
 	[int]$Number,
 
-	[Parameter(Mandatory)]
 	[ValidateNotNullOrEmpty()]
 	[string]$PartOfSet,
 
-	[Parameter(Mandatory)]
 	[ValidateNotNullOrEmpty()]
 	[string]$Genre,
 
@@ -159,18 +161,25 @@ $resolvedPath = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path
 $target = Get-Item -LiteralPath $resolvedPath -ErrorAction Stop
 Write-Verbose "Resolved input path to '$resolvedPath'."
 
+$logDirectory = if ($target.PSIsContainer) {
+	$target.FullName
+}
+else {
+	$target.DirectoryName
+}
 $resolvedLogPath = if ($PSBoundParameters.ContainsKey('LogPath')) {
 	[System.IO.Path]::GetFullPath($LogPath)
 }
-if ($resolvedLogPath) {
-	Write-Verbose "CSV logging is enabled at '$resolvedLogPath'."
-	$logDirectory = Split-Path -Path $resolvedLogPath -Parent
-	if (-not (Test-Path -LiteralPath $logDirectory -PathType Container)) {
-		throw "The log directory does not exist: '$logDirectory'."
-	}
-	if (Test-Path -LiteralPath $resolvedLogPath -PathType Container) {
-		throw "The log path must be a file path, not a directory: '$resolvedLogPath'."
-	}
+else {
+	Join-Path -Path $logDirectory -ChildPath 'metadata-updates.csv'
+}
+Write-Verbose "CSV logging is enabled at '$resolvedLogPath'."
+$logDirectory = Split-Path -Path $resolvedLogPath -Parent
+if (-not (Test-Path -LiteralPath $logDirectory -PathType Container)) {
+	throw "The log directory does not exist: '$logDirectory'."
+}
+if (Test-Path -LiteralPath $resolvedLogPath -PathType Container) {
+	throw "The log path must be a file path, not a directory: '$resolvedLogPath'."
 }
 
 if ($target.PSIsContainer) {
@@ -228,8 +237,12 @@ foreach ($file in $files) {
 		AlbumArtist  = $AlbumArtist
 		Album        = $Album
 		Number       = $trackNumber
-		PartOfSet    = $PartOfSet
-		Genre        = $Genre
+	}
+	if ($PSBoundParameters.ContainsKey('PartOfSet')) {
+		$metadataValues.PartOfSet = $PartOfSet
+	}
+	if ($PSBoundParameters.ContainsKey('Genre')) {
+		$metadataValues.Genre = $Genre
 	}
 	if ($PSBoundParameters.ContainsKey('ContributingArtists')) {
 		$metadataValues.ContributingArtists = $ContributingArtists
@@ -260,10 +273,14 @@ foreach ($file in $files) {
 				'-metadata', "album_artist=$AlbumArtist"
 				'-metadata', "album=$Album"
 				'-metadata', "track=$trackNumber"
-				'-metadata', "disc=$PartOfSet"
-				'-metadata', "genre=$Genre"
 				'-id3v2_version', '3'
 			)
+			if ($PSBoundParameters.ContainsKey('PartOfSet')) {
+				$ffmpegArguments += @('-metadata', "disc=$PartOfSet")
+			}
+			if ($PSBoundParameters.ContainsKey('Genre')) {
+				$ffmpegArguments += @('-metadata', "genre=$Genre")
+			}
 
 			if ($PSBoundParameters.ContainsKey('ContributingArtists')) {
 				$ffmpegArguments += @('-metadata', "artist=$ContributingArtists")
@@ -297,8 +314,8 @@ foreach ($file in $files) {
 			AlbumArtist         = $AlbumArtist
 			Album               = $Album
 			Number              = $trackNumber
-			PartOfSet           = $PartOfSet
-			Genre               = $Genre
+			PartOfSet           = if ($PSBoundParameters.ContainsKey('PartOfSet')) { $PartOfSet } else { $null }
+			Genre               = if ($PSBoundParameters.ContainsKey('Genre')) { $Genre } else { $null }
 			ContributingArtists = if ($PSBoundParameters.ContainsKey('ContributingArtists')) {
 				$ContributingArtists
 			}
@@ -307,12 +324,10 @@ foreach ($file in $files) {
 			}
 			Year                = if ($PSBoundParameters.ContainsKey('Year')) { $Year } else { $null }
 		}
-		if ($resolvedLogPath) {
-			Write-Verbose "Appending updated metadata for '$($file.FullName)' to the CSV log."
-			$updatedMetadata |
-				Export-Csv -LiteralPath $resolvedLogPath -NoTypeInformation -Append -ErrorAction Stop
-			Write-Host "Appended metadata values to '$resolvedLogPath'."
-		}
+		Write-Verbose "Appending updated metadata for '$($file.FullName)' to the CSV log."
+		$updatedMetadata |
+			Export-Csv -LiteralPath $resolvedLogPath -NoTypeInformation -Append -ErrorAction Stop
+		Write-Host "Appended metadata values to '$resolvedLogPath'."
 		$updatedMetadata
 	}
 	else {
